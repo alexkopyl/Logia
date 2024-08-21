@@ -1,0 +1,7 @@
+name: Logia
+version: '${project.version}'
+main: org.quark.logia.Logia
+api-version: '1.21'
+commands:
+  login:
+    description: 'Введите свой пароль для входа'
