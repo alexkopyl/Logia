@@ -117,11 +117,18 @@ public final class Logia extends JavaPlugin implements Listener {
         Document user = usersCollection.find(query).first();
 
         if (user != null) {
-            loginStatus.put(player, true);
-            authenticatedPlayers.add(player);  // Добавляем игрока в список авторизованных
-            player.sendMessage(Component.text("Добро пожаловать!", NamedTextColor.GREEN));
-            logger.info("ИГРОК: {} :авторизован", player.getName());
-        } else {
+            String hashPassword = user.getString("password");
+            if (BCrypt.checkPwd(password, hashPassword)) { //выбрать кодировщика
+                loginStatus.put(player, true);
+                authenticatedPlayers.add(player);  // Добавляем игрока в список авторизованных
+                player.sendMessage(Component.text("Добро пожаловать!", NamedTextColor.GREEN));
+                logger.info("ИГРОК: {} :авторизован", player.getName());
+            } else {
+                player.kick(Component.text("Неправильный пароль."));
+                logger.info("ИГРОК: {} :ввел неверный пароль", player.getName());
+            }
+        }
+        else {
             player.kick(Component.text("Неправильный пароль."));
             logger.info("ИГРОК: {} :ввел неверный пароль", player.getName());
         }
